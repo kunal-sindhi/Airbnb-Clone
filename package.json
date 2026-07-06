@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/kunal-sindhi/Airbnb-Clone/issues"
   },
-  "homepage": "https://github.com/kunal-sindhi/Airbnb-Clone#readme"
+  "homepage": "https://github.com/kunal-sindhi/Airbnb-Clone#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  }
 }
