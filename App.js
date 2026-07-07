@@ -1,39 +1,44 @@
 // Import the Express module
-const express=require('express');
+const express = require("express");
+
+const {pageNotFound}=require('./controllers/error.js');
+
+// Import the path module
+const path = require('path');
 
 // Set the port number
-const PORT=3000;
+const PORT = 3005;
 
 // Create an Express application
-const app=express();
+const app = express();
 
-// Define the middleware
-app.get('/',(req,res)=>{
-  res.send(`Welcome to our page:
-    <a href='/add-home'>Add Home</a>`
-  );
-})
+//set body-parser
+app.use(express.urlencoded());
 
-app.get('/add-home',(req,res)=>{
-  res.send(`
-    <h1>Register Your Home on AirBnB
-</h1>
-<form action="/add-home" method="POST">
-<input type="text" name="houseName" placeholder="Enter your House Name"><br>
-<input type="text" name="price" placeholder="Price Per Night"><br>
-<input type="text" name="location" placeholder="Location"><br>
-<input type="text" name="rating" placeholder="Rating"><br>
-<input type="text" name="photoURL" placeholder="Enter Photo URL"><br>
-<input type="submit" value="submit">
-</form>
-    `)
-})
+// Import the host router
+const hostRouter = require("./routes/host");
 
-app.post('/add-home',(req,res,next)=>{
-res.send(`Home Registered Successfully`)
-})
+// Import the store router
+const storeRouter = require("./routes/store");
 
-//Start the server
-app.listen(PORT,()=>{
-  console.log(`Server is running on Port http://localhost:${PORT}`)
-})
+// Configure EJS view engine
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname,'data')));
+
+// Mount the store router for the / routes
+app.use("/", storeRouter);
+
+// Mount the host router to handle add-home routes
+app.use("/", hostRouter);
+
+
+// 404 Page
+app.use(pageNotFound);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on Port http://localhost:${PORT}`);
+});
